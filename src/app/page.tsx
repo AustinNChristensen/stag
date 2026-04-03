@@ -57,13 +57,21 @@ function StagHead() {
   const pathRefs = useRef<SVGPathElement[]>([]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const animateIn = async () => {
-      // Get path lengths for stroke animation
+      // Set stroke dash lengths based on actual path lengths
       pathRefs.current.forEach((path) => {
         if (!path) return;
-        const length = path.getTotalLength();
-        path.style.strokeDasharray = `${length}`;
-        path.style.strokeDashoffset = `${length}`;
+        try {
+          const length = path.getTotalLength();
+          path.style.strokeDasharray = `${length}`;
+          path.style.strokeDashoffset = `${length}`;
+        } catch {
+          // fallback if getTotalLength not available
+          path.style.strokeDasharray = "1000";
+          path.style.strokeDashoffset = "1000";
+        }
       });
 
       // Stagger the antler draw-on
