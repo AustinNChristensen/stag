@@ -4,13 +4,14 @@
 "use client";
 
 import { useRef } from "react";
+import { StagSVG } from "@/components/StagSVG";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 
 // ─── Animated SVG Stag Head ──────────────────────────────────────────────────
 // Proper frontal stag with large sweeping antlers
 
-function StagHead() {
+function StagHeadOLD() {
   return (
     <motion.div
       animate={{ scale: [1, 1.015, 1] }}
@@ -197,7 +198,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Hero */}
       <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-16 pb-8">
-        <StagHead />
+        <StagSVG />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
