@@ -3,8 +3,8 @@
  */
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 
 // ─── Animated SVG Stag Head ──────────────────────────────────────────────────
@@ -53,40 +53,7 @@ const FACE_PATHS = [
 ];
 
 function StagHead() {
-  const controls = useAnimation();
   const pathRefs = useRef<SVGPathElement[]>([]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const animateIn = async () => {
-      // Set stroke dash lengths based on actual path lengths
-      pathRefs.current.forEach((path) => {
-        if (!path) return;
-        try {
-          const length = path.getTotalLength();
-          path.style.strokeDasharray = `${length}`;
-          path.style.strokeDashoffset = `${length}`;
-        } catch {
-          // fallback if getTotalLength not available
-          path.style.strokeDasharray = "1000";
-          path.style.strokeDashoffset = "1000";
-        }
-      });
-
-      // Stagger the antler draw-on
-      await controls.start((i) => ({
-        strokeDashoffset: 0,
-        transition: {
-          duration: 1.5,
-          delay: i * 0.08,
-          ease: "easeInOut",
-        },
-      }));
-    };
-
-    animateIn();
-  }, [controls]);
 
   return (
     <motion.div
@@ -125,12 +92,16 @@ function StagHead() {
             }}
             d={d}
             stroke="#c9a84c"
-            strokeWidth={i < 6 ? (i === 0 || i === 6 ? 3.5 : 2) : (i === 6 ? 3.5 : 2)}
+            strokeWidth={i === 0 || i === 6 ? 3.5 : 2}
             strokeLinecap="round"
             fill="none"
             custom={i}
-            animate={controls}
-            style={{ strokeDasharray: 1000, strokeDashoffset: 1000 }}
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={{
+              pathLength: { duration: 1.5, delay: i * 0.1, ease: "easeInOut" },
+              opacity: { duration: 0.1, delay: i * 0.1 },
+            }}
           />
         ))}
       </svg>
