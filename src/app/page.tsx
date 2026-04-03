@@ -8,102 +8,148 @@ import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 
 // ─── Animated SVG Stag Head ──────────────────────────────────────────────────
-
-const ANTLER_PATHS = [
-  // Left main beam
-  "M200 280 C185 250 175 220 165 190 C155 160 148 130 155 100 C158 85 165 72 172 60",
-  // Left brow tine
-  "M175 210 C165 200 152 195 140 198 C128 201 118 210 115 222",
-  // Left bez tine
-  "M168 178 C155 165 145 155 130 150 C118 146 105 148 95 155",
-  // Left royal tine
-  "M163 148 C148 132 138 118 128 105 C118 92 108 82 95 78",
-  // Left top fork A
-  "M162 110 C155 92 148 78 138 65 C130 54 120 46 108 42",
-  // Left top fork B
-  "M162 110 C168 92 172 78 178 65 C182 54 184 44 182 32",
-
-  // Right main beam (mirrored)
-  "M200 280 C215 250 225 220 235 190 C245 160 252 130 245 100 C242 85 235 72 228 60",
-  // Right brow tine
-  "M225 210 C235 200 248 195 260 198 C272 201 282 210 285 222",
-  // Right bez tine
-  "M232 178 C245 165 255 155 270 150 C282 146 295 148 305 155",
-  // Right royal tine
-  "M237 148 C252 132 262 118 272 105 C282 92 292 82 305 78",
-  // Right top fork A
-  "M238 110 C245 92 252 78 262 65 C270 54 280 46 292 42",
-  // Right top fork B
-  "M238 110 C232 92 228 78 222 65 C218 54 216 44 218 32",
-];
-
-const FACE_PATHS = [
-  // Head outline
-  "M200 340 C175 340 158 320 155 295 C152 270 158 250 165 235 C172 220 180 210 185 200 L200 185 L215 200 C220 210 228 220 235 235 C242 250 248 270 245 295 C242 320 225 340 200 340Z",
-  // Left eye
-  "M182 265 C179 260 179 254 182 249 C185 244 191 242 196 244 C201 246 203 252 201 258 C199 264 193 267 188 266 C185 265 183 265 182 265Z",
-  // Right eye  
-  "M218 265 C221 260 221 254 218 249 C215 244 209 242 204 244 C199 246 197 252 199 258 C201 264 207 267 212 266 C215 265 217 265 218 265Z",
-  // Muzzle
-  "M188 305 C188 295 193 288 200 288 C207 288 212 295 212 305 C212 315 207 322 200 322 C193 322 188 315 188 305Z",
-  // Left ear
-  "M162 240 C152 228 148 212 155 200 C158 194 164 190 170 192 C176 194 178 202 176 212 C174 220 170 230 168 238Z",
-  // Right ear
-  "M238 240 C248 228 252 212 245 200 C242 194 236 190 230 192 C224 194 222 202 224 212 C226 220 230 230 232 238Z",
-];
+// Proper frontal stag with large sweeping antlers
 
 function StagHead() {
-  const pathRefs = useRef<SVGPathElement[]>([]);
-
   return (
     <motion.div
-      animate={{ scale: [1, 1.02, 1] }}
-      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      animate={{ scale: [1, 1.015, 1] }}
+      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 3 }}
       className="flex items-center justify-center"
     >
       <svg
-        width="400"
-        height="380"
-        viewBox="0 0 400 380"
+        width="320"
+        height="420"
+        viewBox="0 0 320 420"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="drop-shadow-[0_0_40px_rgba(201,168,76,0.3)]"
+        className="drop-shadow-[0_0_50px_rgba(201,168,76,0.25)]"
       >
-        {/* Face paths — fade in after antlers */}
-        {FACE_PATHS.map((d, i) => (
-          <motion.path
-            key={`face-${i}`}
-            d={d}
-            stroke="#c9a84c"
-            strokeWidth="1.5"
-            fill={i === 0 ? "rgba(201,168,76,0.05)" : i >= 4 ? "rgba(201,168,76,0.08)" : "none"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.8 + i * 0.1 }}
-          />
-        ))}
+        {/* ── LEFT ANTLER ── */}
+        {/* Main left beam: rises from skull, sweeps up-left */}
+        <motion.path d="M130 170 C125 150 118 128 110 108 C102 88 92 68 85 48 C80 34 78 20 80 8"
+          stroke="#c9a84c" strokeWidth="4" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 1.2, delay: 0.0, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0 } }} />
+        {/* Left brow tine: short forward tine near base */}
+        <motion.path d="M118 140 C108 132 96 128 82 130 C72 131 62 136 56 144"
+          stroke="#c9a84c" strokeWidth="3" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.15, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.15 } }} />
+        {/* Left bez tine: mid-beam tine angling back-left */}
+        <motion.path d="M108 112 C96 104 82 100 68 102 C56 104 46 110 40 120"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.28, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.28 } }} />
+        {/* Left trez tine: upper mid tine */}
+        <motion.path d="M96 86 C82 76 68 72 54 76 C44 79 36 86 32 96"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.40, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.40 } }} />
+        {/* Left crown fork A: top of beam splits left */}
+        <motion.path d="M80 48 C70 36 58 28 44 24 C32 20 20 22 12 28"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.52, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.52 } }} />
+        {/* Left crown fork B: top of beam goes straight up */}
+        <motion.path d="M80 48 C78 34 76 20 76 6 C76 -2 78 -8 82 -12"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.7, delay: 0.60, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.60 } }} />
+        {/* Left crown fork C: top of beam sweeps right */}
+        <motion.path d="M80 48 C88 36 96 28 106 22 C114 17 122 16 128 20"
+          stroke="#c9a84c" strokeWidth="2" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.7, delay: 0.68, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.68 } }} />
 
-        {/* Antler paths — draw on with stroke animation */}
-        {ANTLER_PATHS.map((d, i) => (
-          <motion.path
-            key={`antler-${i}`}
-            ref={(el) => {
-              if (el) pathRefs.current[i] = el;
-            }}
-            d={d}
-            stroke="#c9a84c"
-            strokeWidth={i === 0 || i === 6 ? 3.5 : 2}
-            strokeLinecap="round"
-            fill="none"
-            custom={i}
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ pathLength: 1, opacity: 1 }}
-            transition={{
-              pathLength: { duration: 1.5, delay: i * 0.1, ease: "easeInOut" },
-              opacity: { duration: 0.1, delay: i * 0.1 },
-            }}
-          />
-        ))}
+        {/* ── RIGHT ANTLER (mirrored) ── */}
+        {/* Main right beam */}
+        <motion.path d="M190 170 C195 150 202 128 210 108 C218 88 228 68 235 48 C240 34 242 20 240 8"
+          stroke="#c9a84c" strokeWidth="4" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 1.2, delay: 0.05, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.05 } }} />
+        {/* Right brow tine */}
+        <motion.path d="M202 140 C212 132 224 128 238 130 C248 131 258 136 264 144"
+          stroke="#c9a84c" strokeWidth="3" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.20, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.20 } }} />
+        {/* Right bez tine */}
+        <motion.path d="M212 112 C224 104 238 100 252 102 C264 104 274 110 280 120"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.33, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.33 } }} />
+        {/* Right trez tine */}
+        <motion.path d="M224 86 C238 76 252 72 266 76 C276 79 284 86 288 96"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.45, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.45 } }} />
+        {/* Right crown fork A */}
+        <motion.path d="M240 48 C250 36 262 28 276 24 C288 20 300 22 308 28"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.8, delay: 0.57, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.57 } }} />
+        {/* Right crown fork B */}
+        <motion.path d="M240 48 C242 34 244 20 244 6 C244 -2 242 -8 238 -12"
+          stroke="#c9a84c" strokeWidth="2.5" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.7, delay: 0.65, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.65 } }} />
+        {/* Right crown fork C */}
+        <motion.path d="M240 48 C232 36 224 28 214 22 C206 17 198 16 192 20"
+          stroke="#c9a84c" strokeWidth="2" strokeLinecap="round" fill="none"
+          initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ pathLength: { duration: 0.7, delay: 0.73, ease: "easeInOut" }, opacity: { duration: 0.01, delay: 0.73 } }} />
+
+        {/* ── HEAD / FACE ── */}
+        {/* Head shape: narrow top (forehead), wider cheeks, tapers to muzzle */}
+        <motion.path d="M140 175 C134 172 126 168 122 162 C116 154 114 144 116 134 C118 124 124 116 130 112 C138 108 148 108 160 108 C172 108 182 108 190 112 C196 116 202 124 204 134 C206 144 204 154 198 162 C194 168 186 172 180 175 C173 178 167 180 160 180 C153 180 147 178 140 175Z"
+          stroke="#c9a84c" strokeWidth="2" fill="rgba(201,168,76,0.04)"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.0 }} />
+        {/* Neck / lower head extending down */}
+        <motion.path d="M140 175 C136 185 134 200 136 218 C138 236 144 252 152 264 C156 270 160 274 160 274 C160 274 164 270 168 264 C176 252 182 236 184 218 C186 200 184 185 180 175"
+          stroke="#c9a84c" strokeWidth="2" fill="rgba(201,168,76,0.04)"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.1 }} />
+        {/* Left ear: upward-pointing oval */}
+        <motion.path d="M122 148 C112 140 106 128 108 116 C110 106 118 100 126 102 C132 104 136 112 134 122 C132 132 128 142 124 150Z"
+          stroke="#c9a84c" strokeWidth="1.5" fill="rgba(201,168,76,0.06)"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1.15 }} />
+        {/* Right ear */}
+        <motion.path d="M198 148 C208 140 214 128 212 116 C210 106 202 100 194 102 C188 104 184 112 186 122 C188 132 192 142 196 150Z"
+          stroke="#c9a84c" strokeWidth="1.5" fill="rgba(201,168,76,0.06)"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 1.2 }} />
+        {/* Left eye: almond shape */}
+        <motion.path d="M143 142 C146 138 151 136 156 137 C161 138 164 142 163 146 C162 150 157 153 152 152 C147 151 143 147 143 142Z"
+          stroke="#c9a84c" strokeWidth="1.5" fill="rgba(201,168,76,0.15)"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 1.25 }} />
+        {/* Right eye */}
+        <motion.path d="M177 142 C174 138 169 136 164 137 C159 138 156 142 157 146 C158 150 163 153 168 152 C173 151 177 147 177 142Z"
+          stroke="#c9a84c" strokeWidth="1.5" fill="rgba(201,168,76,0.15)"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 1.3 }} />
+        {/* Nose bridge line */}
+        <motion.path d="M156 155 C157 162 158 168 159 172 M164 155 C163 162 162 168 161 172"
+          stroke="#c9a84c" strokeWidth="1" strokeLinecap="round"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 1.35 }} />
+        {/* Muzzle */}
+        <motion.path d="M148 228 C148 218 153 210 160 210 C167 210 172 218 172 228 C172 238 167 246 160 246 C153 246 148 238 148 228Z"
+          stroke="#c9a84c" strokeWidth="1.5" fill="rgba(201,168,76,0.08)"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 1.4 }} />
+        {/* Nostril left */}
+        <motion.path d="M153 228 C153 224 156 222 158 222 C159 222 160 224 160 227"
+          stroke="#c9a84c" strokeWidth="1" strokeLinecap="round" fill="none"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 1.5 }} />
+        {/* Nostril right */}
+        <motion.path d="M167 228 C167 224 164 222 162 222 C161 222 160 224 160 227"
+          stroke="#c9a84c" strokeWidth="1" strokeLinecap="round" fill="none"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 1.55 }} />
       </svg>
     </motion.div>
   );
@@ -150,19 +196,19 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Hero */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+      <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-16 pb-8">
         <StagHead />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 2.2 }}
-          className="text-center mt-8"
+          transition={{ duration: 0.6, delay: 1.8 }}
+          className="text-center mt-6"
         >
-          <h1 className="text-7xl font-bold tracking-[0.3em] text-white mb-4">
+          <h1 className="text-6xl sm:text-7xl font-bold tracking-[0.3em] text-white mb-4">
             STAG
           </h1>
-          <p className="text-zinc-400 text-lg max-w-md mx-auto mb-8">
+          <p className="text-zinc-400 text-base sm:text-lg max-w-md mx-auto mb-8">
             The AI-native full-stack starter.{" "}
             <span className="text-amber-500">Ship faster. Scale further.</span>
           </p>
@@ -180,15 +226,6 @@ export default function Home() {
               View Stack
             </Link>
           </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 3 }}
-          className="absolute bottom-8 text-zinc-600 text-sm"
-        >
-          ↓ scroll
         </motion.div>
       </section>
 
@@ -210,21 +247,9 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-12">Why STAG?</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            {
-              title: "AI-Native by Default",
-              icon: "🤖",
-              desc: "AGENTS.md tells every AI agent (Claude Code, Cursor, Codex) exactly how the codebase works. Add a page, table, or task in seconds — no hallucinations.",
-            },
-            {
-              title: "Free Tier to Revenue",
-              icon: "🚀",
-              desc: "Every service has a generous free tier. Go from $0 to paying customers without changing your stack. Scale only when you need to.",
-            },
-            {
-              title: "Batteries Included",
-              icon: "🔋",
-              desc: "Auth, database, background jobs, CMS, analytics, error tracking, and email — all wired together and ready to extend.",
-            },
+            { title: "AI-Native by Default", icon: "🤖", desc: "AGENTS.md tells every AI agent exactly how the codebase works. Add a page, table, or task in seconds — no hallucinations." },
+            { title: "Free Tier to Revenue", icon: "🚀", desc: "Every service has a generous free tier. Go from $0 to paying customers without changing your stack." },
+            { title: "Batteries Included", icon: "🔋", desc: "Auth, database, background jobs, CMS, analytics, error tracking, and email — all wired together out of the box." },
           ].map((item) => (
             <div key={item.title} className="text-center">
               <div className="text-4xl mb-4">{item.icon}</div>
@@ -238,7 +263,7 @@ export default function Home() {
       {/* Quick start */}
       <section className="max-w-3xl mx-auto px-6 py-24 border-t border-zinc-800">
         <h2 className="text-3xl font-bold text-center mb-12">Quick Start</h2>
-        <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 font-mono text-sm">
+        <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6 font-mono text-sm overflow-x-auto">
           {[
             "git clone https://github.com/AustinNChristensen/stag my-app",
             "cd my-app && cp .env.example .env.local",
@@ -251,22 +276,12 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <p className="text-zinc-500 text-sm text-center mt-4">
-          Add your env vars and you&apos;re live. Full setup guide in{" "}
-          <code className="text-amber-600">AGENTS.md</code>.
-        </p>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-zinc-800 py-8 text-center text-zinc-600 text-sm">
-        <p>
-          STAG Stack — MIT License —{" "}
-          <a
-            href="https://github.com/AustinNChristensen/stag"
-            className="text-amber-600 hover:text-amber-500"
-          >
-            GitHub
-          </a>
+        <p>STAG Stack — MIT License —{" "}
+          <a href="https://github.com/AustinNChristensen/stag" className="text-amber-600 hover:text-amber-500">GitHub</a>
         </p>
       </footer>
     </div>
